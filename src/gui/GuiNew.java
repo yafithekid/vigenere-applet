@@ -162,6 +162,7 @@ public class GuiNew extends javax.swing.JApplet {
         });
 
         options.add(optionPlainButton);
+        optionPlainButton.setSelected(true);
         optionPlainButton.setText("Plain");
 
         options.add(optionFiveLettersButton);
@@ -195,6 +196,7 @@ public class GuiNew extends javax.swing.JApplet {
         plainTextPaneLabel.setText("Plain Text");
 
         fileType.add(fileTypePlainFileButton);
+        fileTypePlainFileButton.setSelected(true);
         fileTypePlainFileButton.setText("Plain File");
 
         fileType.add(fileTypecipherFileButton);
@@ -205,6 +207,7 @@ public class GuiNew extends javax.swing.JApplet {
             }
         });
 
+        standardCipherButton.setSelected(true);
         standardCipherButton.setText("Standard");
 
         extendedCipherButton.setText("Extended");
