@@ -415,17 +415,26 @@
     </Component>
     <Component class="javax.swing.JRadioButton" name="standardCipherButton">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="cipherType"/>
+        </Property>
         <Property name="selected" type="boolean" value="true"/>
         <Property name="text" type="java.lang.String" value="Standard"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JRadioButton" name="extendedCipherButton">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="cipherType"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Extended"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JRadioButton" name="variantCipherButton">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="cipherType"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Variant"/>
       </Properties>
     </Component>

@@ -207,11 +207,14 @@ public class GuiNew extends javax.swing.JApplet {
             }
         });
 
+        cipherType.add(standardCipherButton);
         standardCipherButton.setSelected(true);
         standardCipherButton.setText("Standard");
 
+        cipherType.add(extendedCipherButton);
         extendedCipherButton.setText("Extended");
 
+        cipherType.add(variantCipherButton);
         variantCipherButton.setText("Variant");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
