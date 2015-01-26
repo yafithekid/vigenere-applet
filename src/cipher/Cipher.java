@@ -15,13 +15,13 @@ public interface Cipher {
      * @param options
      * @return encryted string
      */
-    public String encrypt(String pText,String key,HashMap<String,String> options);
+    public String encrypt(String pText,String key);
    
     /**
      * 
      * @param cText encrypted text
      * @return decrypted string
      */
-    public String decrypt(String cText,String key,HashMap<String,String> options);
+    public String decrypt(String cText,String key);
 }
 

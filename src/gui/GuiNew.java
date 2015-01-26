@@ -6,6 +6,19 @@
 
 package gui;
 
+import cipher.Cipher;
+import cipher.VigenereExtended;
+import cipher.VigenereStandard;
+import cipher.VigenereVariant;
+import helpers.StringHelper;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author yafithekid
@@ -60,9 +73,12 @@ public class GuiNew extends javax.swing.JApplet {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         options = new javax.swing.ButtonGroup();
         source = new javax.swing.ButtonGroup();
+        fileType = new javax.swing.ButtonGroup();
+        cipherType = new javax.swing.ButtonGroup();
         keyTextField = new javax.swing.JTextField();
         sourceLabel = new javax.swing.JLabel();
         vigenereLabel = new javax.swing.JLabel();
@@ -76,24 +92,28 @@ public class GuiNew extends javax.swing.JApplet {
         jScrollPane1 = new javax.swing.JScrollPane();
         filePathTextPane = new javax.swing.JTextPane();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        plainTextArea = new javax.swing.JTextArea();
+        jScrollPane = new javax.swing.JScrollPane();
+        cipherTextArea = new javax.swing.JTextArea();
         encryptTextButton = new javax.swing.JButton();
         decryptTextButton = new javax.swing.JButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jComboBox1 = new javax.swing.JComboBox();
-        jButton1 = new javax.swing.JButton();
+        optionPlainButton = new javax.swing.JRadioButton();
+        optionFiveLettersButton = new javax.swing.JRadioButton();
+        optionNoSpacesButton = new javax.swing.JRadioButton();
+        fileLoadButton = new javax.swing.JButton();
         message = new javax.swing.JLabel();
         encryptSaveButton = new javax.swing.JButton();
         decryptSaveButton = new javax.swing.JButton();
         plainTextPaneLabel1 = new javax.swing.JLabel();
         plainTextPaneLabel = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
+        fileTypePlainFileButton = new javax.swing.JRadioButton();
+        fileTypecipherFileButton = new javax.swing.JRadioButton();
+        standardCipherButton = new javax.swing.JRadioButton();
+        extendedCipherButton = new javax.swing.JRadioButton();
+        variantCipherButton = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(240, 240, 240));
+        setPreferredSize(new java.awt.Dimension(1024, 506768));
 
         sourceLabel.setText("Source");
 
@@ -114,17 +134,18 @@ public class GuiNew extends javax.swing.JApplet {
         sourceTextButton.setSelected(true);
         sourceTextButton.setText("Text");
 
+        source.add(sourceFileButton);
         sourceFileButton.setText("File");
 
         jScrollPane1.setViewportView(filePathTextPane);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        plainTextArea.setColumns(20);
+        plainTextArea.setRows(5);
+        jScrollPane2.setViewportView(plainTextArea);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane3.setViewportView(jTextArea2);
+        cipherTextArea.setColumns(20);
+        cipherTextArea.setRows(5);
+        jScrollPane.setViewportView(cipherTextArea);
 
         encryptTextButton.setText("Encrypt");
         encryptTextButton.addActionListener(new java.awt.event.ActionListener() {
@@ -140,28 +161,28 @@ public class GuiNew extends javax.swing.JApplet {
             }
         });
 
-        jRadioButton1.setText("Plain");
+        options.add(optionPlainButton);
+        optionPlainButton.setText("Plain");
 
-        jRadioButton2.setText("5 Letters");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        options.add(optionFiveLettersButton);
+        optionFiveLettersButton.setText("5 Letters");
+        optionFiveLettersButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                optionFiveLettersButtonActionPerformed(evt);
             }
         });
 
-        jRadioButton3.setText("No Spaces");
+        options.add(optionNoSpacesButton);
+        optionNoSpacesButton.setText("No Spaces");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Vigenere Standard", "Vigenere Extended", " " }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
+        fileLoadButton.setText("Load");
 
-        jButton1.setText("Load");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sourceFileButton, org.jdesktop.beansbinding.ELProperty.create("${selected}"), fileLoadButton, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        fileLoadButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                fileLoadButtonActionPerformed(evt);
             }
         });
 
@@ -173,7 +194,22 @@ public class GuiNew extends javax.swing.JApplet {
 
         plainTextPaneLabel.setText("Plain Text");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Plain Text", "Cipher Text" }));
+        fileType.add(fileTypePlainFileButton);
+        fileTypePlainFileButton.setText("Plain File");
+
+        fileType.add(fileTypecipherFileButton);
+        fileTypecipherFileButton.setText("Cipher File");
+        fileTypecipherFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileTypecipherFileButtonActionPerformed(evt);
+            }
+        });
+
+        standardCipherButton.setText("Standard");
+
+        extendedCipherButton.setText("Extended");
+
+        variantCipherButton.setText("Variant");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -182,190 +218,245 @@ public class GuiNew extends javax.swing.JApplet {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGap(36, 36, 36)
+                        .addComponent(optionLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(optionNoSpacesButton)
+                            .addComponent(optionFiveLettersButton)
+                            .addComponent(optionPlainButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(filePathLabel)
+                                        .addGap(7, 7, 7)
+                                        .addComponent(copyrightLabel))
+                                    .addComponent(cipherLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(27, 27, 27)
-                                .addComponent(keyLabel)
-                                .addGap(28, 28, 28))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(sourceLabel)
-                                .addGap(22, 22, 22)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(keyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(vigenereLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addGap(16, 16, 16)
-                                        .addComponent(sourceTextButton)
-                                        .addGap(26, 26, 26)
-                                        .addComponent(sourceFileButton))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(filePathLabel)
-                            .addComponent(cipherLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(copyrightLabel))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(optionLabel)
-                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(27, 27, 27)
+                                        .addComponent(keyLabel)
+                                        .addGap(28, 28, 28))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(sourceLabel)
+                                        .addGap(22, 22, 22)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jRadioButton1)
-                                    .addComponent(jRadioButton3)
-                                    .addComponent(jRadioButton2)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(83, 83, 83)
-                                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(vigenereLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(plainTextPaneLabel)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(decryptTextButton)
-                            .addGap(36, 36, 36)
-                            .addComponent(decryptSaveButton)
-                            .addGap(110, 110, 110))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(plainTextPaneLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(encryptTextButton)
-                            .addGap(40, 40, 40)
-                            .addComponent(encryptSaveButton)
-                            .addGap(108, 108, 108)))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                .addGap(16, 16, 16)
+                                                .addComponent(sourceTextButton)
+                                                .addGap(26, 26, 26)
+                                                .addComponent(sourceFileButton))
+                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(fileLoadButton))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(fileTypePlainFileButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(fileTypecipherFileButton))
+                                    .addComponent(extendedCipherButton)
+                                    .addComponent(variantCipherButton)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(standardCipherButton, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(keyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(plainTextPaneLabel)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(decryptTextButton)
+                                    .addGap(38, 38, 38)
+                                    .addComponent(decryptSaveButton)
+                                    .addGap(110, 110, 110))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(plainTextPaneLabel1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(encryptTextButton)
+                                    .addGap(40, 40, 40)
+                                    .addComponent(encryptSaveButton)
+                                    .addGap(108, 108, 108)))
+                            .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(174, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(vigenereLabel)
-                    .addComponent(plainTextPaneLabel))
+                .addComponent(vigenereLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(copyrightLabel)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(keyLabel)
+                    .addComponent(keyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(sourceTextButton)
+                            .addComponent(sourceFileButton)
+                            .addComponent(sourceLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(filePathLabel)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(fileLoadButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fileTypePlainFileButton)
+                    .addComponent(fileTypecipherFileButton))
+                .addGap(31, 31, 31)
+                .addComponent(standardCipherButton)
+                .addGap(1, 1, 1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cipherLabel)
+                    .addComponent(extendedCipherButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(variantCipherButton)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(copyrightLabel)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(keyLabel)
-                            .addComponent(keyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(sourceTextButton)
-                                    .addComponent(sourceFileButton)
-                                    .addComponent(sourceLabel))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(filePathLabel)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jButton1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cipherLabel)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(17, 17, 17)
-                        .addComponent(jRadioButton1)
+                        .addComponent(optionPlainButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jRadioButton3)
-                            .addComponent(optionLabel))
+                        .addComponent(optionNoSpacesButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(optionFiveLettersButton))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(encryptTextButton)
-                            .addComponent(encryptSaveButton)
-                            .addComponent(plainTextPaneLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 5, Short.MAX_VALUE)))
+                        .addGap(29, 29, 29)
+                        .addComponent(optionLabel)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(plainTextPaneLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(encryptTextButton)
+                    .addComponent(encryptSaveButton)
+                    .addComponent(plainTextPaneLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(decryptTextButton)
                     .addComponent(decryptSaveButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
     private void encryptTextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encryptTextButtonActionPerformed
-        // TODO add your handling code here:
+        String plainText = plainTextArea.getText();
+        String key = keyTextField.getText();
+        if (optionNoSpacesButton.isSelected()){
+            plainText = StringHelper.clearSpaces(plainText);
+        } else if (optionFiveLettersButton.isSelected()){
+            plainText = StringHelper.fiveSpaces(plainText);
+        }
+        Cipher cipher;
+        if (standardCipherButton.isSelected()){
+            cipher = new VigenereStandard();
+        } else if (extendedCipherButton.isSelected()){
+            cipher = new VigenereExtended();
+        } else {
+            cipher = new VigenereVariant();
+        }
+        cipherTextArea.setText(cipher.encrypt(plainText,key));
     }//GEN-LAST:event_encryptTextButtonActionPerformed
 
     private void decryptTextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decryptTextButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_decryptTextButtonActionPerformed
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+    private void optionFiveLettersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionFiveLettersButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+    }//GEN-LAST:event_optionFiveLettersButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void fileLoadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileLoadButtonActionPerformed
+        String filePath = filePathTextPane.getText();
+        FileReader fr;
+        try {
+            fr = new FileReader(filePath);
+            BufferedReader br = new BufferedReader(fr);
+            StringBuilder text = new StringBuilder();
+            try {
+                String s = br.readLine();
+                while (s != null){
+                    text.append(s);
+                    s = br.readLine();
+                }
+                if (fileTypePlainFileButton.isSelected()){
+                    plainTextArea.setText(text.toString());
+                } else {
+                    plainTextArea.setText(text.toString());
+                }
+            } catch (IOException ex) {
+                message.setText(ex.getMessage());
+                ex.printStackTrace();
+            }
+        } catch (FileNotFoundException e){
+            message.setText("File "+filePath+" not found");
+        }
+    }//GEN-LAST:event_fileLoadButtonActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void fileTypecipherFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileTypecipherFileButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_fileTypecipherFileButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel cipherLabel;
+    private javax.swing.JTextArea cipherTextArea;
+    private javax.swing.ButtonGroup cipherType;
     private javax.swing.JLabel copyrightLabel;
     private javax.swing.JButton decryptSaveButton;
     private javax.swing.JButton decryptTextButton;
     private javax.swing.JButton encryptSaveButton;
     private javax.swing.JButton encryptTextButton;
+    private javax.swing.JRadioButton extendedCipherButton;
+    private javax.swing.JButton fileLoadButton;
     private javax.swing.JLabel filePathLabel;
     private javax.swing.JTextPane filePathTextPane;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
+    private javax.swing.ButtonGroup fileType;
+    private javax.swing.JRadioButton fileTypePlainFileButton;
+    private javax.swing.JRadioButton fileTypecipherFileButton;
+    private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JLabel keyLabel;
     private javax.swing.JTextField keyTextField;
     private javax.swing.JLabel message;
+    private javax.swing.JRadioButton optionFiveLettersButton;
     private javax.swing.JLabel optionLabel;
+    private javax.swing.JRadioButton optionNoSpacesButton;
+    private javax.swing.JRadioButton optionPlainButton;
     private javax.swing.ButtonGroup options;
+    private javax.swing.JTextArea plainTextArea;
     private javax.swing.JLabel plainTextPaneLabel;
     private javax.swing.JLabel plainTextPaneLabel1;
     private javax.swing.ButtonGroup source;
     private javax.swing.JRadioButton sourceFileButton;
     private javax.swing.JLabel sourceLabel;
     private javax.swing.JRadioButton sourceTextButton;
+    private javax.swing.JRadioButton standardCipherButton;
+    private javax.swing.JRadioButton variantCipherButton;
     private javax.swing.JLabel vigenereLabel;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
