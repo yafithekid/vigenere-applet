@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,6 +59,7 @@ public class GuiNew extends javax.swing.JApplet {
             java.awt.EventQueue.invokeAndWait(new Runnable() {
                 public void run() {
                     initComponents();
+                    resize(800,600);
                 }
             });
         } catch (Exception ex) {
@@ -102,8 +104,8 @@ public class GuiNew extends javax.swing.JApplet {
         optionNoSpacesButton = new javax.swing.JRadioButton();
         fileLoadButton = new javax.swing.JButton();
         message = new javax.swing.JLabel();
-        encryptSaveButton = new javax.swing.JButton();
-        decryptSaveButton = new javax.swing.JButton();
+        plainTextSaveButton = new javax.swing.JButton();
+        cipherTextSaveButton = new javax.swing.JButton();
         plainTextPaneLabel1 = new javax.swing.JLabel();
         plainTextPaneLabel = new javax.swing.JLabel();
         fileTypePlainFileButton = new javax.swing.JRadioButton();
@@ -113,7 +115,8 @@ public class GuiNew extends javax.swing.JApplet {
         variantCipherButton = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(240, 240, 240));
-        setPreferredSize(new java.awt.Dimension(1024, 506768));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setPreferredSize(new java.awt.Dimension(1024, 768));
 
         sourceLabel.setText("Source");
 
@@ -148,6 +151,7 @@ public class GuiNew extends javax.swing.JApplet {
         jScrollPane.setViewportView(cipherTextArea);
 
         encryptTextButton.setText("Encrypt");
+        encryptTextButton.setEnabled(true);
         encryptTextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 encryptTextButtonActionPerformed(evt);
@@ -155,6 +159,7 @@ public class GuiNew extends javax.swing.JApplet {
         });
 
         decryptTextButton.setText("Decrypt");
+        decryptTextButton.setEnabled(true);
         decryptTextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 decryptTextButtonActionPerformed(evt);
@@ -187,9 +192,19 @@ public class GuiNew extends javax.swing.JApplet {
             }
         });
 
-        encryptSaveButton.setText("Save");
+        plainTextSaveButton.setText("Save");
+        plainTextSaveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                plainTextSaveButtonActionPerformed(evt);
+            }
+        });
 
-        decryptSaveButton.setText("Save");
+        cipherTextSaveButton.setText("Save");
+        cipherTextSaveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cipherTextSaveButtonActionPerformed(evt);
+            }
+        });
 
         plainTextPaneLabel1.setText("Cipher Text");
 
@@ -216,23 +231,32 @@ public class GuiNew extends javax.swing.JApplet {
 
         cipherType.add(variantCipherButton);
         variantCipherButton.setText("Variant");
+        variantCipherButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                variantCipherButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addComponent(optionLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(optionNoSpacesButton)
-                            .addComponent(optionFiveLettersButton)
-                            .addComponent(optionPlainButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(optionPlainButton)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(optionFiveLettersButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(decryptTextButton)
+                                .addGap(35, 35, 35)
+                                .addComponent(cipherTextSaveButton)
+                                .addGap(108, 108, 108))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -271,30 +295,28 @@ public class GuiNew extends javax.swing.JApplet {
                                         .addComponent(fileTypePlainFileButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(fileTypecipherFileButton))
-                                    .addComponent(extendedCipherButton)
-                                    .addComponent(variantCipherButton)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(standardCipherButton, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(keyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(keyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(extendedCipherButton, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(variantCipherButton, javax.swing.GroupLayout.Alignment.LEADING))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(plainTextPaneLabel)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(decryptTextButton)
-                                    .addGap(38, 38, 38)
-                                    .addComponent(decryptSaveButton)
-                                    .addGap(110, 110, 110))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                     .addComponent(plainTextPaneLabel1)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(encryptTextButton)
                                     .addGap(40, 40, 40)
-                                    .addComponent(encryptSaveButton)
+                                    .addComponent(plainTextSaveButton)
                                     .addGap(108, 108, 108)))
                             .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(174, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -325,13 +347,17 @@ public class GuiNew extends javax.swing.JApplet {
                     .addComponent(fileTypecipherFileButton))
                 .addGap(31, 31, 31)
                 .addComponent(standardCipherButton)
-                .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cipherLabel)
-                    .addComponent(extendedCipherButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(variantCipherButton)
-                .addGap(18, 18, 18)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(cipherLabel)
+                        .addGap(53, 53, 53))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(extendedCipherButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(variantCipherButton)
+                        .addGap(15, 15, 15)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(optionPlainButton)
@@ -342,7 +368,9 @@ public class GuiNew extends javax.swing.JApplet {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addComponent(optionLabel)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(38, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(plainTextPaneLabel)
@@ -351,16 +379,14 @@ public class GuiNew extends javax.swing.JApplet {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(encryptTextButton)
-                    .addComponent(encryptSaveButton)
+                    .addComponent(plainTextSaveButton)
                     .addComponent(plainTextPaneLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(decryptTextButton)
-                    .addComponent(decryptSaveButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cipherTextSaveButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -387,7 +413,22 @@ public class GuiNew extends javax.swing.JApplet {
     }//GEN-LAST:event_encryptTextButtonActionPerformed
 
     private void decryptTextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decryptTextButtonActionPerformed
-        // TODO add your handling code here:
+        String initialText = cipherTextArea.getText();
+        String key = keyTextField.getText();
+        if (optionNoSpacesButton.isSelected()){
+            initialText = StringHelper.clearSpaces(initialText);
+        } else if (optionFiveLettersButton.isSelected()){
+            initialText = StringHelper.fiveSpaces(initialText);
+        }
+        Cipher cipher;
+        if (standardCipherButton.isSelected()){
+            cipher = new VigenereStandard();
+        } else if (extendedCipherButton.isSelected()){
+            cipher = new VigenereExtended();
+        } else {
+            cipher = new VigenereVariant();
+        }
+        plainTextArea.setText(cipher.decrypt(initialText, key));
     }//GEN-LAST:event_decryptTextButtonActionPerformed
 
     private void optionFiveLettersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionFiveLettersButtonActionPerformed
@@ -410,7 +451,7 @@ public class GuiNew extends javax.swing.JApplet {
                 if (fileTypePlainFileButton.isSelected()){
                     plainTextArea.setText(text.toString());
                 } else {
-                    plainTextArea.setText(text.toString());
+                    cipherTextArea.setText(text.toString());
                 }
             } catch (IOException ex) {
                 message.setText(ex.getMessage());
@@ -425,15 +466,75 @@ public class GuiNew extends javax.swing.JApplet {
         // TODO add your handling code here:
     }//GEN-LAST:event_fileTypecipherFileButtonActionPerformed
 
+    private void variantCipherButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_variantCipherButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_variantCipherButtonActionPerformed
+
+    private void plainTextSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plainTextSaveButtonActionPerformed
+        FileWriter fw = null;
+        String filePath = System.getProperty("user.dir");
+        filePath = filePath.concat("-plainText.txt");
+        System.out.println(filePath);
+        File file = new File(filePath);
+        if (!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        try {
+            fw = new FileWriter(file);
+            fw.write(plainTextArea.getText());
+            message.setText("Saved to: "+filePath);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                fw.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+    }//GEN-LAST:event_plainTextSaveButtonActionPerformed
+
+    private void cipherTextSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cipherTextSaveButtonActionPerformed
+        FileWriter fw = null;
+        String filePath = System.getProperty("user.dir");
+        filePath = filePath.concat("-cipherText.txt");
+        System.out.println(filePath);
+        File file = new File(filePath);
+        if (!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        try {
+            fw = new FileWriter(file);
+            fw.write(cipherTextArea.getText());
+            message.setText("Saved to: "+filePath);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                fw.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_cipherTextSaveButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel cipherLabel;
     private javax.swing.JTextArea cipherTextArea;
+    private javax.swing.JButton cipherTextSaveButton;
     private javax.swing.ButtonGroup cipherType;
     private javax.swing.JLabel copyrightLabel;
-    private javax.swing.JButton decryptSaveButton;
     private javax.swing.JButton decryptTextButton;
-    private javax.swing.JButton encryptSaveButton;
     private javax.swing.JButton encryptTextButton;
     private javax.swing.JRadioButton extendedCipherButton;
     private javax.swing.JButton fileLoadButton;
@@ -456,6 +557,7 @@ public class GuiNew extends javax.swing.JApplet {
     private javax.swing.JTextArea plainTextArea;
     private javax.swing.JLabel plainTextPaneLabel;
     private javax.swing.JLabel plainTextPaneLabel1;
+    private javax.swing.JButton plainTextSaveButton;
     private javax.swing.ButtonGroup source;
     private javax.swing.JRadioButton sourceFileButton;
     private javax.swing.JLabel sourceLabel;

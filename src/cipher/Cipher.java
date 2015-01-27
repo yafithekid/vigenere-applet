@@ -8,7 +8,6 @@ import java.util.HashMap;
  */
 
 public interface Cipher {
-    
     /**
      * @param pText plain text
      * @param key

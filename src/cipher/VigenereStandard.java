@@ -36,8 +36,9 @@ public class VigenereStandard implements Cipher{
     }
     
     @Override
-    public String encrypt(String _plainText, String key) {
+    public String encrypt(String _plainText, String _key) {
         String plainText = (new String(_plainText)).toUpperCase();
+        String key = (new String(_key)).toUpperCase();
         
         StringBuffer keyText = new StringBuffer();
         while (keyText.length() < plainText.length()){
@@ -52,8 +53,9 @@ public class VigenereStandard implements Cipher{
     }
 
     @Override
-    public String decrypt(String _cipherText, String key) {
+    public String decrypt(String _cipherText, String _key) {
         String cipherText = (new String(_cipherText)).toUpperCase();
+        String key = (new String(_key)).toUpperCase();
         StringBuffer keyText = new StringBuffer();
         while (keyText.length() < cipherText.length()){
             keyText.append(key);
