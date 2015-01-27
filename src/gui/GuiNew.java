@@ -8,8 +8,9 @@ package gui;
 
 import cipher.Cipher;
 import cipher.VigenereExtended;
+import cipher.VigenereExtendedAutoKey;
 import cipher.VigenereStandard;
-import cipher.VigenereVariant;
+import cipher.VigenereStandardAutoKey;
 import helpers.StringHelper;
 import java.io.BufferedReader;
 import java.io.File;
@@ -112,7 +113,8 @@ public class GuiNew extends javax.swing.JApplet {
         fileTypecipherFileButton = new javax.swing.JRadioButton();
         standardCipherButton = new javax.swing.JRadioButton();
         extendedCipherButton = new javax.swing.JRadioButton();
-        variantCipherButton = new javax.swing.JRadioButton();
+        standardAutoKeyCipherButton = new javax.swing.JRadioButton();
+        extendedAutoKeyCipherButton = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(240, 240, 240));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -229,13 +231,16 @@ public class GuiNew extends javax.swing.JApplet {
         cipherType.add(extendedCipherButton);
         extendedCipherButton.setText("Extended");
 
-        cipherType.add(variantCipherButton);
-        variantCipherButton.setText("Variant");
-        variantCipherButton.addActionListener(new java.awt.event.ActionListener() {
+        cipherType.add(standardAutoKeyCipherButton);
+        standardAutoKeyCipherButton.setText("Autokey Standard");
+        standardAutoKeyCipherButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                variantCipherButtonActionPerformed(evt);
+                standardAutoKeyCipherButtonActionPerformed(evt);
             }
         });
+
+        cipherType.add(extendedAutoKeyCipherButton);
+        extendedAutoKeyCipherButton.setText("Autokey Extended");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -296,10 +301,15 @@ public class GuiNew extends javax.swing.JApplet {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(fileTypecipherFileButton))
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(standardCipherButton, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addComponent(standardCipherButton)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(standardAutoKeyCipherButton))
                                         .addComponent(keyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(extendedCipherButton, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(variantCipherButton, javax.swing.GroupLayout.Alignment.LEADING))))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addComponent(extendedCipherButton)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(extendedAutoKeyCipherButton)))))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -346,7 +356,9 @@ public class GuiNew extends javax.swing.JApplet {
                     .addComponent(fileTypePlainFileButton)
                     .addComponent(fileTypecipherFileButton))
                 .addGap(31, 31, 31)
-                .addComponent(standardCipherButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(standardCipherButton)
+                    .addComponent(standardAutoKeyCipherButton))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(1, 1, 1)
@@ -354,10 +366,10 @@ public class GuiNew extends javax.swing.JApplet {
                         .addGap(53, 53, 53))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(extendedCipherButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(variantCipherButton)
-                        .addGap(15, 15, 15)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(extendedCipherButton)
+                            .addComponent(extendedAutoKeyCipherButton))
+                        .addGap(41, 41, 41)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(optionPlainButton)
@@ -406,8 +418,10 @@ public class GuiNew extends javax.swing.JApplet {
             cipher = new VigenereStandard();
         } else if (extendedCipherButton.isSelected()){
             cipher = new VigenereExtended();
+        } else if (standardAutoKeyCipherButton.isSelected()){
+            cipher = new VigenereStandardAutoKey();
         } else {
-            cipher = new VigenereVariant();
+            cipher = new VigenereExtendedAutoKey();
         }
         cipherTextArea.setText(cipher.encrypt(plainText,key));
     }//GEN-LAST:event_encryptTextButtonActionPerformed
@@ -425,8 +439,10 @@ public class GuiNew extends javax.swing.JApplet {
             cipher = new VigenereStandard();
         } else if (extendedCipherButton.isSelected()){
             cipher = new VigenereExtended();
+        } else if (standardAutoKeyCipherButton.isSelected()){
+            cipher = new VigenereStandardAutoKey();
         } else {
-            cipher = new VigenereVariant();
+            cipher = new VigenereExtendedAutoKey();
         }
         plainTextArea.setText(cipher.decrypt(initialText, key));
     }//GEN-LAST:event_decryptTextButtonActionPerformed
@@ -466,9 +482,9 @@ public class GuiNew extends javax.swing.JApplet {
         // TODO add your handling code here:
     }//GEN-LAST:event_fileTypecipherFileButtonActionPerformed
 
-    private void variantCipherButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_variantCipherButtonActionPerformed
+    private void standardAutoKeyCipherButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_standardAutoKeyCipherButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_variantCipherButtonActionPerformed
+    }//GEN-LAST:event_standardAutoKeyCipherButtonActionPerformed
 
     private void plainTextSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plainTextSaveButtonActionPerformed
         FileWriter fw = null;
@@ -536,6 +552,7 @@ public class GuiNew extends javax.swing.JApplet {
     private javax.swing.JLabel copyrightLabel;
     private javax.swing.JButton decryptTextButton;
     private javax.swing.JButton encryptTextButton;
+    private javax.swing.JRadioButton extendedAutoKeyCipherButton;
     private javax.swing.JRadioButton extendedCipherButton;
     private javax.swing.JButton fileLoadButton;
     private javax.swing.JLabel filePathLabel;
@@ -562,8 +579,8 @@ public class GuiNew extends javax.swing.JApplet {
     private javax.swing.JRadioButton sourceFileButton;
     private javax.swing.JLabel sourceLabel;
     private javax.swing.JRadioButton sourceTextButton;
+    private javax.swing.JRadioButton standardAutoKeyCipherButton;
     private javax.swing.JRadioButton standardCipherButton;
-    private javax.swing.JRadioButton variantCipherButton;
     private javax.swing.JLabel vigenereLabel;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

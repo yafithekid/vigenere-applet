@@ -1,37 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cipher;
 
-import java.util.HashMap;
-
 /**
- *
  * @author yafithekid
  */
-public class VigenereVariant implements Cipher {
-    
-    public int MOD = 256;
-    
-    public char encrypt(char _m,char _k){
-        int m = _m, k = _k;
-        int c = (m + k) % MOD;
-        return (char) c;
-    }
-    
-    public char decrypt(char _d,char _k){
-        int d = _d, k = _k;
-        int p = (d - k) % MOD;
-        if (p < MOD) p += MOD;
-        return (char) p;
-    }
+public class VigenereStandardAutoKey extends VigenereStandard {
     
     @Override
-    public String encrypt(String _plainText, String key) {
-        String plainText = (new String(_plainText));
+    public String encrypt(String _plainText, String _key) {
+        String plainText = (new String(_plainText)).toUpperCase();
+        String key = (new String(_key)).toUpperCase();
         
         StringBuffer keyText = new StringBuffer();
         keyText.append(key);
@@ -47,8 +24,9 @@ public class VigenereVariant implements Cipher {
     }
 
     @Override
-    public String decrypt(String _cipherText, String key) {
-        String cipherText = (new String(_cipherText));
+    public String decrypt(String _cipherText, String _key) {
+        String cipherText = (new String(_cipherText)).toUpperCase();
+        String key = (new String(_key)).toUpperCase();
         
         StringBuffer keyText = new StringBuffer();
         keyText.append(key);
@@ -62,5 +40,4 @@ public class VigenereVariant implements Cipher {
         }
         return plainText.toString();
     }
-    
 }
