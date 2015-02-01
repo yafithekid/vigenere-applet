@@ -1,0 +1,8 @@
+JFileChooser fc = new JFileChooser("C:\\Users\\timothy.pratama\\Desktop\\Tucil 1 Kriptografi\\Vigenere Cipher");
+       int retval = fc.showSaveDialog(backgroundPanel);
+       if(retval == JFileChooser.APPROVE_OPTION) {
+           File file = fc.getSelectedFile();
+           engine.saveFile(file.getAbsolutePath());
+           messageLabel.setText("Save Successful");
+           plaintextTextArea.setText(engine.getPlaintext());
+       }

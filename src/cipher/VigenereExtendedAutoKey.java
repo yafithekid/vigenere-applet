@@ -18,11 +18,7 @@ public class VigenereExtendedAutoKey extends VigenereExtended {
     public String encrypt(String _plainText, String key) {
         String plainText = (new String(_plainText));
         
-        StringBuffer keyText = new StringBuffer();
-        keyText.append(key);
-        if (keyText.length() < plainText.length()){
-            keyText.append(plainText);
-        }
+        String keyText = this.generateKey(plainText, key);
         StringBuffer cipherText = new StringBuffer();
         
         for(int i = 0; i < plainText.length(); i++){
@@ -35,11 +31,7 @@ public class VigenereExtendedAutoKey extends VigenereExtended {
     public String decrypt(String _cipherText, String key) {
         String cipherText = (new String(_cipherText));
         
-        StringBuffer keyText = new StringBuffer();
-        keyText.append(key);
-        if (keyText.length() < cipherText.length()){
-            keyText.append(cipherText);
-        }
+        String keyText = this.generateKey(cipherText, key);
         StringBuffer plainText = new StringBuffer();
         
         for(int i = 0; i< cipherText.length(); i++){
@@ -48,4 +40,13 @@ public class VigenereExtendedAutoKey extends VigenereExtended {
         return plainText.toString();
     }
     
+    @Override
+    public String generateKey(String text,String key){
+        String realKey = key + text;
+        StringBuffer result = new StringBuffer();
+        for(int i = 0; i < text.length(); i++){
+            result.append(realKey.charAt(i));
+        }
+        return result.toString();
+    }
 }

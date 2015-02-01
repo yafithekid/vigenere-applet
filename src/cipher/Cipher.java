@@ -22,5 +22,13 @@ public interface Cipher {
      * @return decrypted string
      */
     public String decrypt(String cText,String key);
+    
+    /**
+     * create full key
+     * @param text
+     * @param key
+     * @return key equals text length
+     */
+    public String generateKey(String text,String key);
 }
 

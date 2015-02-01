@@ -1,5 +1,7 @@
 package cipher;
 
+import helpers.StringHelper;
+
 /**
  * @author yafithekid
  */
@@ -10,11 +12,7 @@ public class VigenereStandardAutoKey extends VigenereStandard {
         String plainText = (new String(_plainText)).toUpperCase();
         String key = (new String(_key)).toUpperCase();
         
-        StringBuffer keyText = new StringBuffer();
-        keyText.append(key);
-        if (keyText.length() < plainText.length()){
-            keyText.append(plainText);
-        }
+        String keyText = this.generateKey(plainText, key);
         StringBuffer cipherText = new StringBuffer();
         
         for(int i = 0; i < plainText.length(); i++){
@@ -28,16 +26,28 @@ public class VigenereStandardAutoKey extends VigenereStandard {
         String cipherText = (new String(_cipherText)).toUpperCase();
         String key = (new String(_key)).toUpperCase();
         
-        StringBuffer keyText = new StringBuffer();
-        keyText.append(key);
-        if (keyText.length() < cipherText.length()){
-            keyText.append(cipherText);
-        }
+        String keyText = this.generateKey(cipherText, key);
         StringBuffer plainText = new StringBuffer();
         
         for(int i = 0; i< cipherText.length(); i++){
             plainText.append(this.decrypt(cipherText.charAt(i),keyText.charAt(i)));
         }
         return plainText.toString();
+    }
+    
+    public String generateKey(String _text,String _key){
+        String key = _key + _text;
+        StringBuffer result = new StringBuffer();
+        int j = 0;
+        for(int i = 0; i < _text.length(); i++){
+            if ('A' <= _text.charAt(i) && _text.charAt(i) <= 'Z'){
+                while (! ('A' <= key.charAt(j) && key.charAt(j) <= 'Z')) j++;
+                result.append(key.charAt(j));
+                j++;
+            } else {
+                result.append(' ');
+            }
+        }
+        return result.toString();
     }
 }

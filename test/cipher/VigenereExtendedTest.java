@@ -96,4 +96,13 @@ public class VigenereExtendedTest {
         assertEquals(expResult, result);
     }
     
+    @Test
+    public void testGenerateKey(){
+        String text = "THIS PLAINTEXT";
+                    // SONYTHIS PLAIN
+        String key = "SONY";
+        String expResult = "SONYTHIS PLAIN";
+        VigenereExtendedAutoKey instance = new VigenereExtendedAutoKey();
+        assertEquals(expResult,instance.generateKey(text, key));
+    }
 }

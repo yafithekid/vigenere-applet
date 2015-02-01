@@ -94,4 +94,13 @@ public class VigenereStandardTest {
         assertEquals(expResult, result);
     }
     
+    @Test
+    public void testGenerateKey(){
+        String text = "THIS PLAIN TEXT!";
+        String key = "SONY";
+        VigenereStandard instance = new VigenereStandard();
+        String expResult = "SONY SONYS ONYS ";
+        String result = instance.generateKey(text, key);
+        assertEquals(expResult, result);
+    }
 }
